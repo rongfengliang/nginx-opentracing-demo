@@ -15,7 +15,7 @@ services:
     ports:
       - "8080:8080"
   elasticsearch:
-   image: elasticsearch
+   image: elasticsearch:5.6.12
    ulimits:
       memlock:
         soft: -1
@@ -45,17 +45,18 @@ services:
       - "9001"
     ports:
       - "9001:9001"
-    command: 
+    command:
       - /app/server
       - -collector_host
       - jaeger
 
   jaeger:
-    image: jaegertracing/all-in-one
+    image: jaegertracing/all-in-one:1.7
     environment:
       - COLLECTOR_ZIPKIN_HTTP_PORT=9411
       - ES_SERVER_URLS=http://elasticsearch:9200
       - SPAN_STORAGE_TYPE=elasticsearch
+      - ES_TAGS_AS_FIELDS=true
     networks:
       trivial_example:
         aliases:
